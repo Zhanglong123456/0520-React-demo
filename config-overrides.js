@@ -1,5 +1,7 @@
 const {override, fixBabelImports, addLessLoader,addDecoratorsLegacy,addWebpackAlias} = require('customize-cra');
 
+const {resolve} = require("path")
+
 module.exports = override(
     fixBabelImports('import', {
         libraryName: 'antd',
@@ -15,6 +17,9 @@ module.exports = override(
     addDecoratorsLegacy(),
     //配置路径别名  简化路径
     addWebpackAlias({
-
+        "@coms":resolve(__dirname,"src/components"),
+        "@conts":resolve(__dirname,"src/containers"),
+        "@config":resolve(__dirname,"src/config"),
+        "@redux":resolve(__dirname,"src/redux"),
     })
 );
