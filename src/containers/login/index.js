@@ -4,7 +4,7 @@ import {Form, Input, Icon, Button, message} from "antd";
 
 import "./index.less"
 
-import logo from "./logo.png"
+import logo from "../../assets/img/logo.png"
 
 import {connect} from "react-redux"
 
@@ -12,6 +12,9 @@ import {saveUser} from "@redux/action-creators";
 
 import {fLogin} from "../../api"
 
+import WithCheckLogin from "../with-checkout"
+
+@WithCheckLogin
 
 @connect(
    null,

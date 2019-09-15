@@ -1,11 +1,10 @@
 import React,{Component} from "react"
 
- class Home extends Component{
+export default class FourAndFour extends Component{
 
     render() {
         return <div>
-           home
+            404
         </div>
     }
 }
-export default Home

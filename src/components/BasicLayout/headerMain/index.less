@@ -1,0 +1,45 @@
+.headerMain{
+  height: 80px;
+  .headerMain-top{
+    height: 50px;
+    line-height: 50px;
+    text-align: right;
+    border-bottom: 1px solid #1DA57A;
+.btn{
+  margin: 0 10px;
+}
+  }
+
+  .headerMain-bottom{
+    align-items: center;
+    display: flex;
+    height: 30px;
+    line-height: 30px;
+    h3{
+      position: relative;
+      margin-bottom: 0;
+      flex-grow: 1;
+      text-align: center;
+      &::after{
+        position: absolute;
+        content: "";
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        display: block;
+        width: 30px;
+        height: 30px;
+        border-top: 20px solid #fff;
+        border-bottom: 20px solid transparent;
+        border-left: 20px solid transparent;
+        border-right: 20px solid transparent;
+      }
+    }
+    span{
+      flex-grow: 2;
+      text-align: right;
+      margin-right: 15px;
+    }
+  }
+
+}
