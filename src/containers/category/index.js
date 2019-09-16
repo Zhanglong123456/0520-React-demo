@@ -25,7 +25,6 @@ import {Card,Button,Icon,Table,Modal} from "antd"
         //发送请求 请求分类数据 更新redux状态
         this.props.getCategories()
     }
-
     changeModal=(value)=>{
         return()=>{
             this.setState({
@@ -33,7 +32,6 @@ import {Card,Button,Icon,Table,Modal} from "antd"
             })
         }
     }
-
     //表单验证
     addCategory=()=>{
 
@@ -53,10 +51,6 @@ import {Card,Button,Icon,Table,Modal} from "antd"
 
         })
     }
-
-    
-
-
     render() {
         const {isShowAddCategoryModal}=this.state
         const columns = [
