@@ -12,3 +12,6 @@ export const reqGetCategories=()=>instance.get("/category/get")
 
 //请求添加分类
 export const reqAddCategory=(categoryName)=>instance.post("/category/add",{categoryName})
+
+//请求修改分类
+export const reqUpdateCategory = (categoryId, categoryName) => instance.post('/category/update', { categoryId, categoryName });

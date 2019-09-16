@@ -3,39 +3,43 @@ import {connect} from "react-redux"
 
 import {reqGetCategories} from "../../api"
 
-import {getCategories,addCategory} from "../../redux/action-creators";
+import {getCategories,addCategory,updateCategory} from "../../redux/action-creators";
 
 import AddCategoryForm from "./add-category-form"
+import UpdateCategoryForm from "./update-category-form"
 
 import {Card,Button,Icon,Table,Modal} from "antd"
 
 @connect(
     (state)=>({categories:state.categories}),
-    {getCategories,addCategory}
+    {getCategories,addCategory,updateCategory}
 )
  class Category extends Component{
 
     state={
-        isShowAddCategoryModal:false
+        isShowAddCategoryModal:false,
+        isShowUpdateCategoryModal:false,
+        category:{}
     }
 
     addCategoryForm=React.createRef()
+    updateCategoryForm=React.createRef()
 
     componentDidMount() {
         //发送请求 请求分类数据 更新redux状态
         this.props.getCategories()
     }
-    changeModal=(value)=>{
+    changeModal=(key,value)=>{
         return()=>{
             this.setState({
-                isShowAddCategoryModal:value
+                [key]:value
             })
         }
     }
     //表单验证
     addCategory=()=>{
 
-        console.log(this.addCategoryForm.current)
+       // console.log(this.updataCategoryForm.current)
         this.addCategoryForm.current.validateFields((err,values)=>{
          if(!err){
            //表单验证成功
@@ -51,8 +55,46 @@ import {Card,Button,Icon,Table,Modal} from "antd"
 
         })
     }
+
+    updateCategory=()=>{
+        this.updateCategoryForm.current.validateFields((err,values)=>{
+            if(!err){
+                //表单验证成功
+                this.props.updateCategory(this.state.category._id,values.categoryName)
+                //隐藏对话框
+                this.setState({
+                    isShowUpdateCategoryModal:false
+                })
+
+                //清空表单项
+                this.updateCategoryForm.current.resetFields()
+            }
+
+        })
+    }
+
+    showUpdateCategoryModal=(category)=>{
+       return()=>{
+           this.setState({
+               isShowUpdateCategoryModal:true,
+               category
+           })
+       }
+
+    }
+
+    hiddenModal=()=>{  //隐藏修改的对话框
+        this.setState({
+            isShowUpdateCategoryModal:false,
+        })
+        //清空表单数据
+        this.updateCategoryForm.current.resetFields()
+    }
+
+
     render() {
-        const {isShowAddCategoryModal}=this.state
+
+        const {isShowAddCategoryModal,isShowUpdateCategoryModal,category}=this.state
         const columns = [
             {
                 title: '品类名称',
@@ -60,10 +102,11 @@ import {Card,Button,Icon,Table,Modal} from "antd"
             },
             {
                 title: '操作',
-                dataIndex: 'operation',
-                render:()=>{
+                //dataIndex: 'operation',//写了dataIndex render方法的参数是对应的值，不写得到的就是整个对象
+                render:(Category)=>{
+                    //console.log(Category.name)//111,222,333
                     return <div>
-                         <Button type="link">修改分类</Button>
+                         <Button type="link" onClick={this.showUpdateCategoryModal(Category)}>修改分类</Button>
                         <Button type="link">删除分类</Button>
                     </div>
                 }
@@ -92,7 +135,7 @@ import {Card,Button,Icon,Table,Modal} from "antd"
         const {categories}=this.props
         return <div>
 
-            <Card title="分类列表" extra={<Button type="primary" onClick={this.changeModal(true)}><Icon type="plus"/>分类列表</Button>}>
+            <Card title="分类列表" extra={<Button type="primary" onClick={this.changeModal("isShowAddCategoryModal",true)}><Icon type="plus"/>分类列表</Button>}>
                 <Table
                     columns={columns}
                     dataSource={categories}
@@ -110,9 +153,20 @@ import {Card,Button,Icon,Table,Modal} from "antd"
                        cancelText="取消"
                        width={300}
                         onOk={this.addCategory} //点击确定的时候  首先要进行表单的验证
-                       onCancel={this.changeModal(false)}
+                       onCancel={this.changeModal("isShowAddCategoryModal",false)}
                 >
                 <AddCategoryForm ref={this.addCategoryForm}/>
+                </Modal>
+
+                <Modal title="修改分类"
+                       visible={isShowUpdateCategoryModal}//是否显示修改分类对话框
+                       okText="确定"
+                       cancelText="取消"
+                       width={300}
+                       onOk={this.updateCategory} //点击确定的时候  首先要进行表单的验证
+                       onCancel={this.hiddenModal}
+                >
+                    <UpdateCategoryForm ref={this.updateCategoryForm} categoryName={category.name}/>
                 </Modal>
             </Card>
         </div>

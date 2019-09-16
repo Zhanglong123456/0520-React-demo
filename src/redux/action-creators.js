@@ -3,8 +3,8 @@
 *
 * */
 
-import {SAVE_USER,REMOVE_USER,SET_TITLE,GET_CATEGORIES_SUCCESS,ADD_CATEGORY_SUCCESS} from "./action-types"
-import {reqGetCategories,reqAddCategory} from "../api";
+import {SAVE_USER,REMOVE_USER,SET_TITLE,GET_CATEGORIES_SUCCESS,ADD_CATEGORY_SUCCESS,UPDATE_CATEGORY_SUCCESS} from "./action-types"
+import {reqGetCategories,reqAddCategory,reqUpdateCategory} from "../api";
 
 //保存用户数据
 export const saveUser=(user)=>({type:SAVE_USER,data:user})
@@ -38,5 +38,17 @@ export const addCategory=(categoryName)=>{
     return async(dispatch)=>{
         const result=await reqAddCategory(categoryName)
         dispatch(addCategorySuccess(result))
+    }
+}
+
+
+//修改分类数据 同步
+const updateCategorySuccess=(category)=>({type:UPDATE_CATEGORY_SUCCESS,data:category})
+
+//修改分类数据
+export const updateCategory=(categoryId, categoryName)=>{
+    return async(dispatch)=>{
+        const result=await reqUpdateCategory(categoryId, categoryName)
+        dispatch(updateCategorySuccess(result))
     }
 }
