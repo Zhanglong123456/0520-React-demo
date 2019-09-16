@@ -22,7 +22,7 @@ instance.interceptors.request.use(
 
         //发送请求的配置对象
         if (token) {
-            config.headers.authentication = token
+            config.headers.authorization = `Bearer ${token}`
         }
         return config
     }

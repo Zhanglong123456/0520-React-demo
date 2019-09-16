@@ -1,19 +1,34 @@
 import React,{Component} from "react"
 
-import {Button,Icon} from "antd"
+import {Button,Icon,Modal} from "antd"
 
 import {withTranslation,getI18n} from "react-i18next";
 
+import {connect} from "react-redux"
+
 import screenfull from "screenfull"
 
+import {formatDate} from "../../../utils/tools"
+
+import {removeUser} from "../../../redux/action-creators";
+
 import "./index.less"
+
+@connect(
+    (state)=>({
+        username:state.user.user.username,
+        title:state.title
+    }),
+   {removeUser}
+)
 
 @withTranslation()
  class HeaderMain extends Component{
 
     state={
         isScreenfull:false,
-        isEnglish:getI18n().language==="en"
+        isEnglish:getI18n().language==="en",
+        time:formatDate()
     }
 
     //切换全屏
@@ -32,6 +47,11 @@ import "./index.less"
                 isScreenfull:!this.state.isScreenfull
             })
         })
+        setInterval(()=>{
+        this.setState({
+            time:formatDate()
+        })
+        },1000)
     }
 
     changeLanguage=()=>{
@@ -51,18 +71,30 @@ import "./index.less"
         })
    }
 
+   //退出
+    logout=()=>{
+        Modal.confirm({
+            title:"确定退出吗",
+            onOk:()=>{
+                this.props.removeUser();
+            }
+        })
+
+    }
+
     render() {
-        const {isScreenfull,isEnglish}=this.state
+        const {username,title,t}=this.props
+        const {isScreenfull,isEnglish,time}=this.state
         return <div className="headerMain">
             <div className="headerMain-top">
                 <Button size="small" onClick={this.change}><Icon type={isScreenfull?"fullscreen-exit":"fullscreen"} /></Button>
            <Button className="btn" onClick={this.changeLanguage}>{isEnglish?"中文":"English"}</Button>
-               <span>欢迎xxx</span>
-               <Button type="link">退出</Button>
+               <span>欢迎 ,{username}</span>
+               <Button type="link" onClick={this.logout}>退出</Button>
             </div>
             <div className="headerMain-bottom">
-              <h3>首页</h3>
-                <span>2019/9/13</span>
+              <h3>{t(title)}</h3>
+                <span>{time}</span>
             </div>
         </div>
     }
