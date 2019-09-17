@@ -24,3 +24,6 @@ export const reqAddProducts=({name, desc, price, categoryId, detail})=>instance.
 
 
 export const reqUpdateProducts=({name, desc, price, categoryId, detail, productId})=>instance.post("/product/update",{name, desc, price, categoryId, detail, productId})
+
+//搜索
+export const reqSearchProducts = ({searchKey, searchValue, pageNum, pageSize}) => instance.get('/product/search', {params: { [searchKey]: searchValue , pageNum, pageSize }})

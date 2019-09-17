@@ -1,6 +1,6 @@
 import React,{Component} from "react"
 import "./index.less"
-import {reqGetProducts} from "../../api"
+import {reqGetProducts,reqSearchProducts} from "../../api"
 import { Card, Select, Input, Button, Icon, Table } from 'antd';
 const { Option } = Select;
 
@@ -11,7 +11,13 @@ class Product extends Component{
 
     state={
         total:0,
-        products:[]
+        products:[],
+        searchKey:"productName",
+        searchValue:"",
+        isSearch:false,
+        pageNum:1,
+        pageSize:3
+
     }
 
     columns = [
@@ -49,11 +55,25 @@ class Product extends Component{
         }
     ];
 
-    getProducts=async (pageName,pageSize)=>{
-        const result =await reqGetProducts(pageName,pageSize)
+    getProducts=async (pageNum,pageSize)=>{
+        const {isSearch}=this.state
+        let result;
+        if(isSearch){
+            const {searchKey,prevValue}=this.state
+          //搜索过  发送搜索请求
+            result=await reqSearchProducts({searchKey,searchValue:prevValue,pageNum,pageSize})
+       this.setState({
+           searchValue:prevValue
+       })
+        } else {
+          //没有搜素过
+            result=await reqGetProducts(pageNum,pageSize)
+        }
       this.setState({
           total:result.total,
-          products:result.list
+          products:result.list,
+          pageSize,
+          pageNum
       })
     }
 
@@ -68,18 +88,41 @@ this.getProducts(1,3)
         }
     };
 
+    select=(value)=>{
+         this.setState({
+             searchKey:value
+         })
+    }
+
+    change=(e)=>{
+        this.setState({
+            searchValue:e.target.value
+        })
+    }
+
+    search=async ()=>{
+        const {searchKey,searchValue,pageNum,pageSize}=this.state
+        const result=await reqSearchProducts({searchKey,searchValue,pageNum,pageSize})
+        this.setState({
+            total:result.total,
+            products:result.list,
+            isSearch:true,
+            prevValue:searchValue
+        })
+    }
+
 
     render() {
 
-        const {products,total}=this.state
+        const {products,total,searchKey,searchValue}=this.state
         return <Card
             title={<div>
-                <Select defaultValue="1">
-                    <Option key="1" value="1">根据商品名称</Option>
-                    <Option key="2" value="2">根据商品描述</Option>
+                <Select value={searchKey} onChange={this.select}>
+                    <Option key="1" value="productName">根据商品名称</Option>
+                    <Option key="2" value="productDesc">根据商品描述</Option>
                 </Select>
-                <Input placeholder="关键字" className="product-input"/>
-                <Button type="primary">搜索</Button>
+                <Input placeholder="关键字" value={searchValue} className="product-input" onChange={this.change}/>
+                <Button type="primary" onClick={this.search}>搜索</Button>
                 </div>}
             extra={<Button type="primary" onClick={this.goSaveUpdate()}><Icon type="plus"/>添加商品</Button>}
         >
