@@ -26,6 +26,7 @@ import {Card,Button,Icon,Table,Modal} from "antd"
     updateCategoryForm=React.createRef()
 
     componentDidMount() {
+        if (this.props.categories.length) return
         //发送请求 请求分类数据 更新redux状态
         this.props.getCategories()
     }
@@ -39,7 +40,7 @@ import {Card,Button,Icon,Table,Modal} from "antd"
     //表单验证
     addCategory=()=>{
 
-       // console.log(this.updataCategoryForm.current)
+        console.log(this.addCategoryForm.current)
         this.addCategoryForm.current.validateFields((err,values)=>{
          if(!err){
            //表单验证成功
@@ -104,7 +105,7 @@ import {Card,Button,Icon,Table,Modal} from "antd"
                 title: '操作',
                 //dataIndex: 'operation',//写了dataIndex render方法的参数是对应的值，不写得到的就是整个对象
                 render:(Category)=>{
-                    //console.log(Category.name)//111,222,333
+                    console.log(Category.name)//111,222,333
                     return <div>
                          <Button type="link" onClick={this.showUpdateCategoryModal(Category)}>修改分类</Button>
                         <Button type="link">删除分类</Button>
@@ -146,6 +147,7 @@ import {Card,Button,Icon,Table,Modal} from "antd"
                         pageSizeOptions: ['3', '6', '9', '12'],
                         defaultPageSize: 3
                     }}
+                    rowKey="_id"
                 />
                 <Modal title="添加分类"
                        visible={isShowAddCategoryModal}//是否显示添加分类对话框
