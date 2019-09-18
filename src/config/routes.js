@@ -3,6 +3,7 @@ import Home from "../components/home"
 import Category from "../containers/category"
 import Product from "../containers/product"
 import SaveUpdate from "../containers/product/save-update"
+import Role from "../containers/role"
 const routes=[
     {
         path:"/",
@@ -28,6 +29,11 @@ const routes=[
         path:"/product/saveupdate",
         exact:true,
         component:SaveUpdate
+    },
+    {
+        path:"/role",
+        exact:true,
+        component:Role
     }
 ]
 

@@ -27,3 +27,13 @@ export const reqUpdateProducts=({name, desc, price, categoryId, detail, productI
 
 //搜索
 export const reqSearchProducts = ({searchKey, searchValue, pageNum, pageSize}) => instance.get('/product/search', {params: { [searchKey]: searchValue , pageNum, pageSize }})
+
+
+//获取角色数据
+export const reqGetRole=()=>instance.get("/role/get")
+
+//请求添加数据
+export const reqAddRole=(name)=>instance.post("/role/add",{name})
+
+//请求更新权限数据
+export const reqUpdateRole=(roleId,authName,menus)=>instance.post("/role/update",{roleId,authName,menus})

@@ -1,6 +1,6 @@
 import {combineReducers} from "redux"
 
-import {SAVE_USER,REMOVE_USER,SET_TITLE,GET_CATEGORIES_SUCCESS,ADD_CATEGORY_SUCCESS,UPDATE_CATEGORY_SUCCESS} from "./action-types"
+import {SAVE_USER,REMOVE_USER,SET_TITLE,GET_CATEGORIES_SUCCESS,ADD_CATEGORY_SUCCESS,UPDATE_CATEGORY_SUCCESS,GET_ROLE_SUCCESS,ADD_ROLE_SSUCCESS,UPDATE_ROLES_SUCCESS} from "./action-types"
 
 import {setItem,getItem,removeItem} from "../utils/storage";
 
@@ -58,8 +58,27 @@ function categories(prevState=[],action) {
 
 }
 
+function roles(prevState=[],action) {
+    switch (action.type) {
+        case GET_ROLE_SUCCESS :
+            return action.data
+        case ADD_ROLE_SSUCCESS:
+            return [...prevState,action.data]
+        case UPDATE_ROLES_SUCCESS:
+            return prevState.map((role)=>{
+                if(role._id===action.data._id){
+                  return action.data
+                }
+                return role
+            })
+        default:
+            return prevState
+    }
+}
+
 export default combineReducers({
     user,
     title,
-    categories
+    categories,
+    roles
 })

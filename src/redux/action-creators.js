@@ -3,8 +3,8 @@
 *
 * */
 
-import {SAVE_USER,REMOVE_USER,SET_TITLE,GET_CATEGORIES_SUCCESS,ADD_CATEGORY_SUCCESS,UPDATE_CATEGORY_SUCCESS} from "./action-types"
-import {reqGetCategories,reqAddCategory,reqUpdateCategory} from "../api";
+import {SAVE_USER,REMOVE_USER,SET_TITLE,GET_CATEGORIES_SUCCESS,ADD_CATEGORY_SUCCESS,UPDATE_CATEGORY_SUCCESS,GET_ROLE_SUCCESS,ADD_ROLE_SSUCCESS,UPDATE_ROLES_SUCCESS} from "./action-types"
+import {reqGetCategories,reqAddCategory,reqUpdateCategory,reqGetRole,reqAddRole,reqUpdateRole} from "../api";
 
 //保存用户数据
 export const saveUser=(user)=>({type:SAVE_USER,data:user})
@@ -50,5 +50,33 @@ export const updateCategory=(categoryId, categoryName)=>{
     return async(dispatch)=>{
         const result=await reqUpdateCategory(categoryId, categoryName)
         dispatch(updateCategorySuccess(result))
+    }
+}
+
+
+//获取角色数据
+const getRoleSuccess=(role)=>({type:GET_ROLE_SUCCESS,data:role})
+export const getRoles=()=>{
+    return async(dispatch)=>{
+        const result =await reqGetRole()
+        dispatch(getRoleSuccess(result))
+    }
+}
+
+//请求添加角色
+const addRolesSuccess=(role)=>({type:ADD_ROLE_SSUCCESS,data:role})
+export const AddRoles=(name)=>{
+    return async(dispatch)=>{
+        const result=await reqAddRole(name)
+        dispatch(addRolesSuccess(result))
+    }
+}
+
+//请求更新角色
+const updateRolesSuccess=(role)=>({type:UPDATE_ROLES_SUCCESS,data:role})
+export const UpdateRoles=(roleId,authName,menus)=>{
+    return async(dispatch)=>{
+        const result=await reqUpdateRole(roleId,authName,menus)
+        dispatch(updateRolesSuccess(result))
     }
 }
